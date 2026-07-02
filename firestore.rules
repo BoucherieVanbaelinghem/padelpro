@@ -1,0 +1,47 @@
+rules_version = '2';
+
+// ─────────────────────────────────────────────────────────────────
+// Règles de sécurité Firestore — PadelPro
+//
+// Modèle retenu : authentification anonyme Firebase (activée côté
+// console, aucun écran de connexion côté app). Toute lecture/écriture
+// exige d'être authentifié, même anonymement — ça bloque les robots
+// et les accès directs à l'API Firestore en dehors de l'app.
+//
+// Limite importante à avoir en tête : l'authentification anonyme ne
+// crée PAS d'isolation par utilisateur. Toute personne qui ouvre le
+// site obtient automatiquement une identité anonyme et peut donc lire
+// et modifier TOUS les tournois stockés, pas seulement les siens.
+// C'est adapté à un outil interne pour un club/une organisation, pas
+// à une appli multi-utilisateurs où chacun doit voir seulement ses
+// propres données.
+// ─────────────────────────────────────────────────────────────────
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    match /tournaments/{tournamentId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /players/{playerId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /meta/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /auditLogs/{logId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
