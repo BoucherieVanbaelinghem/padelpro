@@ -1633,7 +1633,15 @@ textarea.form-control { resize: vertical; min-height: 80px; }
     font-size: 14px;
     font-weight: 700;
   }
-  .t-card-actions .btn-sm:not(:first-child) { flex: 1; min-width: 44px; }
+  .t-card-actions .btn-sm:not(:first-child) {
+    flex: 1 1 30%;
+    min-width: 100px;
+    padding: 8px 6px;
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    justify-content: center;
+  }
 
   /* ── Cartes de match (page Scores) : beaucoup trop grandes sur mobile ──
      Le markup utilise des styles inline (tailles de police, gaps) qui

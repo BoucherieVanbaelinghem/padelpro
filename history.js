@@ -143,9 +143,9 @@ const HistoryModule = (() => {
                 ${!isActive
                   ? `<button class="btn btn-primary btn-sm btn-activate" data-id="${t.id}">▶ Ouvrir</button>`
                   : `<button class="btn btn-success btn-sm" onclick="App.navigate('dashboard')" style="cursor:pointer">📊 Tableau de bord</button>`}
-                <button class="btn btn-secondary btn-sm btn-duplicate" data-id="${t.id}" title="Dupliquer">📋</button>
-                <button class="btn btn-secondary btn-sm btn-export-t" data-id="${t.id}" title="Exporter">📤</button>
-                <button class="btn btn-danger btn-sm btn-del-t" data-id="${t.id}" title="Supprimer">🗑️</button>
+                <button class="btn btn-secondary btn-sm btn-duplicate" data-id="${t.id}" title="Dupliquer">📋 Dupliquer</button>
+                <button class="btn btn-secondary btn-sm btn-export-t" data-id="${t.id}" title="Exporter">📤 Exporter</button>
+                <button class="btn btn-danger btn-sm btn-del-t" data-id="${t.id}" title="Supprimer">🗑️ Supprimer</button>
               </div>
 
               ${next.length > 0 ? `

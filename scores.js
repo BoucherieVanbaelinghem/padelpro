@@ -422,10 +422,10 @@ const ScoresModule = (() => {
                   ? `<span class="badge badge-danger">WO</span>
                      <div style="font-size:10px;color:var(--color-text-muted)">Forfait — ${Utils.escHtml(winner === m.team1Id ? t1 : t2)} gagne</div>
                      <button class="btn btn-sm btn-secondary btn-enter-score" data-id="${m.id}">✏️ Modifier</button>
-                     <button class="btn btn-sm btn-danger btn-delete-score" data-id="${m.id}">🗑️</button>`
+                     <button class="btn btn-sm btn-danger btn-delete-score" data-id="${m.id}">🗑️ Supprimer</button>`
                   : `<span class="badge ${winner ? 'badge-success' : 'badge-warning'} badge-dot">${winner ? 'Terminé' : 'Égalité'}</span>
                      <button class="btn btn-sm btn-secondary btn-enter-score" data-id="${m.id}">✏️ Modifier</button>
-                     <button class="btn btn-sm btn-danger btn-delete-score" data-id="${m.id}" title="Supprimer le score">🗑️</button>`
+                     <button class="btn btn-sm btn-danger btn-delete-score" data-id="${m.id}" title="Supprimer le score">🗑️ Supprimer</button>`
                 : isRunning
                 ? `<span class="badge badge-warning badge-dot">En cours</span>
                    <button class="btn btn-sm btn-success btn-enter-score" data-id="${m.id}">✅ Saisir score</button>
