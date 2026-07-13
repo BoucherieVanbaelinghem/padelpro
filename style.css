@@ -133,13 +133,21 @@ h1,h2,h3,h4,h5,h6 { font-weight: 600; line-height: 1.3; }
   background: var(--sidebar-bg);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  /* overflow:hidden empêchait tout scroll : avec beaucoup d'entrées de
+     menu (14 pages + carte tournoi), le contenu dépasse facilement la
+     hauteur de l'écran sur mobile, et le bas du menu (Paramètres,
+     Affichage public...) devenait invisible ET inaccessible, sans aucun
+     moyen de faire défiler pour l'atteindre. */
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   /* Safe-area appliquée ICI (sur le conteneur à hauteur fixe, box-sizing
      border-box global) plutôt que sur le padding interne de
      .sidebar-header : ça réserve proprement l'espace du haut sans changer
      la formule de padding du header ni risquer de rogner la carte tournoi
      juste en dessous. */
   padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
   z-index: var(--z-sidebar);
   transition: width var(--transition-base), transform var(--transition-base);
 }
@@ -177,6 +185,11 @@ body.sidebar-collapsed .sidebar-header { padding: var(--space-4) var(--space-3);
   padding-left: max(var(--space-4), env(safe-area-inset-left));
   border-bottom: 1px solid var(--sidebar-border);
   flex-shrink: 0;
+  /* Reste visible en haut pendant le défilement du reste du menu. */
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--sidebar-bg);
 }
 
 .sidebar-brand {
