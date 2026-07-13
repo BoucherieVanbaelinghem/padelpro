@@ -231,9 +231,13 @@ body.sidebar-collapsed .sidebar-header { padding: var(--space-4) var(--space-3);
   font-size: var(--font-size-sm);
   font-weight: 600;
   color: white;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* Volontairement PAS de nowrap/ellipsis : un nom tronqué avec "..."
+     revient à cacher une partie du nom, ce qui a été signalé à plusieurs
+     reprises comme "le nom est coupé". On préfère laisser le nom
+     s'enrouler sur 2-3 lignes plutôt que d'en perdre un morceau. */
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.3;
 }
 .stc-date {
   font-size: var(--font-size-xs);
@@ -1038,6 +1042,11 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 }
 
 /* ── Schedule / Planning ─────────────────────────────────────── */
+.planning-grid-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-lg);
+}
 .planning-grid {
   display: grid;
   gap: 0;
@@ -1204,6 +1213,11 @@ textarea.form-control { resize: vertical; min-height: 80px; }
   display: flex; flex-direction: column;
   opacity: 0; pointer-events: none;
   transition: opacity var(--transition-base);
+  /* Sans padding-top, le contenu (dont la bannière "Tournez votre
+     téléphone") se retrouve sous l'encoche/l'horloge du téléphone en mode
+     plein écran, puisque l'app tourne edge-to-edge (viewport-fit=cover). */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 .display-overlay.active { opacity: 1; pointer-events: all; }
 .display-content {
@@ -1213,19 +1227,28 @@ textarea.form-control { resize: vertical; min-height: 80px; }
   color: white;
 }
 .display-close-btn {
-  position: absolute; bottom: var(--space-4); right: var(--space-4);
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
+  position: absolute;
+  bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
+  right: calc(var(--space-4) + env(safe-area-inset-right));
+  /* Fond opaque volontairement sombre : ce bouton doit rester lisible
+     quel que soit le contenu affiché en dessous (fond sombre du mode TV,
+     mais aussi fond clair des cartes du Tableau final en plein écran —
+     avec un fond translucide blanc + texte blanc, il devenait invisible
+     sur fond clair, rendant la fermeture impossible sur mobile). */
+  background: rgba(15,23,42,0.92);
+  border: 1px solid rgba(255,255,255,0.25);
   color: white;
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
+  font-weight: 700;
   cursor: pointer;
   display: flex; align-items: center; gap: var(--space-2);
-  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  z-index: 5;
   transition: background var(--transition-fast);
 }
-.display-close-btn:hover { background: rgba(255,255,255,0.2); }
+.display-close-btn:hover { background: rgba(15,23,42,1); }
 .display-close-btn svg { width: 16px; height: 16px; }
 
 /* ── Tableau final en plein écran (bracket.js) ── */
@@ -1237,6 +1260,13 @@ textarea.form-control { resize: vertical; min-height: 80px; }
   -webkit-overflow-scrolling: touch;
   padding: var(--space-4);
   background: var(--color-bg);
+  /* IMPORTANT : .display-content force color:white pour son propre usage
+     (mode TV, texte sur fond sombre). Le tableau, lui, réutilise les
+     mêmes cartes que la page normale (texte sombre attendu sur fond
+     clair) — sans ce reset, les noms des équipes perdantes (qui n'ont
+     pas de couleur explicite, juste opacity:0.55 sur .bracket-team.loser)
+     héritaient du blanc et devenaient invisibles sur fond clair. */
+  color: var(--color-text);
 }
 @media (max-width: 900px) and (orientation: portrait) {
   .bracket-fullscreen-hint { display: block; }

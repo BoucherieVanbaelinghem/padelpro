@@ -133,14 +133,24 @@ const ScheduleModule = (() => {
 
     const times = Object.keys(byTime).sort(Utils.compareTime.bind(Utils));
 
+    // Largeur minimale par colonne terrain : sans elle, les tracks "1fr"
+    // d'une grille CSS gardent quand même une taille minimale basée sur le
+    // contenu (auto), et avec 5-6 terrains cette somme dépasse largement un
+    // écran de téléphone. Comme .planning-grid a overflow:hidden (pour ses
+    // coins arrondis), le débordement était purement et simplement rogné —
+    // les terrains au-delà des 2 premiers disparaissaient sans aucun moyen
+    // de les faire défiler. Le wrapper ci-dessous ajoute le scroll
+    // horizontal, et minmax() donne à chaque colonne une largeur plancher.
+    const colTemplate = `80px repeat(${courts.length}, minmax(130px, 1fr))`;
     return `
-      <div class="planning-grid" id="planning-grid">
-        <div class="planning-header" style="grid-template-columns:80px ${courts.map(() => '1fr').join(' ')}">
+      <div class="planning-grid-scroll">
+      <div class="planning-grid" id="planning-grid" style="min-width:${80 + courts.length * 130}px">
+        <div class="planning-header" style="grid-template-columns:${colTemplate}">
           <div class="planning-cell planning-time-col">Heure</div>
           ${courts.map(c => `<div class="planning-cell" style="font-size:var(--font-size-xs);font-weight:700;text-align:center">${Utils.escHtml(c.name)}</div>`).join('')}
         </div>
         ${times.map(time => `
-          <div class="slot-row" style="display:grid;grid-template-columns:80px ${courts.map(() => '1fr').join(' ')}">
+          <div class="slot-row" style="display:grid;grid-template-columns:${colTemplate}">
             <div class="planning-cell planning-time-col" style="display:flex;align-items:center;justify-content:center;font-size:var(--font-size-sm);font-weight:700">${time}</div>
             ${courts.map(court => {
               const m = byTime[time]?.[court.id];
@@ -159,6 +169,7 @@ const ScheduleModule = (() => {
                 </div>`;
             }).join('')}
           </div>`).join('')}
+      </div>
       </div>`;
   };
 
