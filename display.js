@@ -86,6 +86,21 @@ const DisplayModule = (() => {
     });
     Utils.el('#btn-export-viewer', _container)?.addEventListener('click', exportViewer);
 
+    // Délégation (et non un binding direct) : le panneau QR est
+    // regénéré dynamiquement par #btn-refresh-qr (innerHTML remplacé),
+    // donc un bouton "Copier le lien" ajouté après coup ne serait jamais
+    // rebindé si on l'attachait seulement ici au chargement initial.
+    _container.addEventListener('click', (e) => {
+      const btn = e.target.closest('#btn-copy-viewer-link');
+      if (!btn) return;
+      const url = btn.dataset.url;
+      navigator.clipboard?.writeText(url).then(() => {
+        App.toast('Lien copié !', 'success');
+      }).catch(() => {
+        App.toast('Impossible de copier automatiquement — sélectionnez le lien manuellement', 'warning');
+      });
+    });
+
     _container.querySelectorAll('.btn-propose-score').forEach(btn => {
       btn.addEventListener('click', () => openPlayerScoreForm(btn.dataset.id));
     });
@@ -230,9 +245,10 @@ const DisplayModule = (() => {
             Utilisez <strong>Exporter la feuille</strong> ou ouvrez l'app via un serveur web.
           </div>` : `
           <img src="${qrApiUrl}" alt="QR Code" style="width:200px;height:200px;max-width:100%;border-radius:var(--radius-md)" onerror="this.style.display='none';document.getElementById('qr-fallback').style.display=''">
-          <div id="qr-fallback" style="display:none;padding:var(--space-4);background:var(--color-bg-alt);border-radius:var(--radius-md);font-size:11px;color:var(--color-text-muted)">⚠️ QR Code indisponible (connexion internet requise)</div>
-          <div style="margin-top:var(--space-2);font-size:10px;color:var(--color-text-faint);word-break:break-all">
-            <a href="${viewerUrl}" target="_blank" rel="noopener" style="color:var(--color-primary)">${viewerUrl}</a>
+          <div id="qr-fallback" style="display:none;padding:var(--space-4);background:var(--color-bg-alt);border-radius:var(--radius-md)">
+            <div style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--space-3)">⚠️ Le QR Code ne s'est pas généré (probablement trop de données pour ce tournoi). Le lien reste utilisable :</div>
+            <a href="${viewerUrl}" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="width:100%;justify-content:center">🔗 Ouvrir le planning</a>
+            <button class="btn btn-secondary btn-sm" id="btn-copy-viewer-link" data-url="${Utils.escHtml(viewerUrl)}" style="width:100%;justify-content:center;margin-top:var(--space-2)">📋 Copier le lien</button>
           </div>
         `}
         <div style="margin-top:var(--space-3);display:flex;flex-direction:column;gap:var(--space-2)">
@@ -244,11 +260,29 @@ const DisplayModule = (() => {
   };
 
   // ── Données compactes pour viewer ─────────────────────────────
+  // IMPORTANT : les identifiants internes (team.id, court.id) sont des
+  // UUID de 36 caractères. Avec 30+ équipes, les réutiliser tels quels
+  // dans ce payload (encodé en base64 puis mis dans l'URL du QR Code)
+  // produit une URL de plusieurs milliers de caractères — trop longue
+  // pour être encodée de façon fiable en QR Code (le service externe
+  // échouait silencieusement, affichant juste "QR Code indisponible").
+  // On remappe donc chaque équipe/terrain vers un index court (0, 1, 2…)
+  // uniquement pour ce payload compact ; viewer.html n'a besoin que de
+  // clés cohérentes entre teams/courts/matches/pools, peu importe leur
+  // forme exacte.
   const buildCompactData = (t) => {
+    const teamIndex = {};
     const teams = {};
-    (t.teams || []).forEach(tm => { teams[tm.id] = tm.name || tm.id; });
+    (t.teams || []).forEach((tm, i) => {
+      teamIndex[tm.id] = String(i);
+      teams[i] = tm.name || tm.id;
+    });
+    const courtIndex = {};
     const courts = {};
-    (t.settings?.courts || []).forEach(c => { courts[c.id] = c.name || c.id; });
+    (t.settings?.courts || []).forEach((c, i) => {
+      courtIndex[c.id] = String(i);
+      courts[i] = c.name || c.id;
+    });
 
     return {
       v: 1,
@@ -257,18 +291,17 @@ const DisplayModule = (() => {
       teams,
       courts,
       matches: (t.matches || []).filter(m => m.scheduledTime).map(m => ({
-        id: m.id,
         t: m.scheduledTime,
-        c: m.courtId || '',
-        a: m.team1Id,
-        b: m.team2Id,
+        c: m.courtId != null ? (courtIndex[m.courtId] ?? '') : '',
+        a: m.team1Id != null ? (teamIndex[m.team1Id] ?? '') : '',
+        b: m.team2Id != null ? (teamIndex[m.team2Id] ?? '') : '',
         s: m.status === 'finished' ? 'f' : m.status === 'running' ? 'r' : 'p',
-        w: m.winnerId || '',
+        w: m.winnerId != null ? (teamIndex[m.winnerId] ?? '') : '',
         sc: m.score?.sets ? m.score.sets.map(s => `${s.team1}-${s.team2}`).join(' ') : ''
       })),
       pools: (t.pools || []).map(p => ({
         n: p.name,
-        ids: p.teamIds || []
+        ids: (p.teamIds || []).map(id => teamIndex[id]).filter(id => id !== undefined)
       }))
     };
   };
