@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" id="meta-theme-color" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Logiciel professionnel de gestion de tournois de padel">
+  <link rel="manifest" href="manifest.json">
+  <title>PadelPro — Gestion de Tournois</title>
+  <link rel="stylesheet" href="style.css?v=20260703c">
+</head>
+<body>
+
+  <!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+  <nav id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="8" fill="white" fill-opacity="0.15"/>
+            <ellipse cx="16" cy="16" rx="10" ry="10" stroke="white" stroke-width="2"/>
+            <path d="M10 16 Q16 10 22 16 Q16 22 10 16Z" fill="white" opacity="0.7"/>
+            <circle cx="20" cy="12" r="2" fill="white"/>
+          </svg>
+        </div>
+        <span class="brand-name">PadelPro</span>
+      </div>
+      <button id="sidebar-collapse" class="sidebar-collapse-btn" title="Réduire le menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 19l-7-7 7-7M18 19l-7-7 7-7"/></svg>
+      </button>
+    </div>
+
+    <div class="sidebar-tournament-card">
+      <div class="stc-name" id="nav-tournament-name">Tournoi de Padel</div>
+      <div class="stc-date" id="nav-tournament-date">—</div>
+      <div class="stc-badge" id="nav-tournament-status">Configuration</div>
+    </div>
+
+    <div class="sidebar-section-label">PRINCIPAL</div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" data-page="history">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="nav-label">Accueil</span>
+      </a>
+      <a class="nav-item active" data-page="dashboard">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span class="nav-label">Tableau de bord</span>
+      </a>
+      <a class="nav-item" data-page="players">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M17 11a3 3 0 0 1 0 6"/><path d="M22 21v-2a3 3 0 0 0-3-3"/></svg>
+        <span class="nav-label">Joueurs</span>
+        <span class="nav-badge" id="badge-players"></span>
+      </a>
+      <a class="nav-item" data-page="teams">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="nav-label">Équipes</span>
+        <span class="nav-badge" id="badge-teams"></span>
+      </a>
+    </nav>
+
+    <div class="sidebar-section-label">TOURNOI</div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" data-page="pools">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/></svg>
+        <span class="nav-label">Poules</span>
+      </a>
+      <a class="nav-item" data-page="courts">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="12" y1="5" x2="12" y2="19"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+        <span class="nav-label">Terrains</span>
+        <span class="nav-badge" id="badge-courts"></span>
+      </a>
+      <a class="nav-item" data-page="schedule">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="nav-label">Planning</span>
+      </a>
+      <a class="nav-item" data-page="scores">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span class="nav-label">Scores</span>
+      </a>
+      <a class="nav-item" data-page="rankings">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span class="nav-label">Classements</span>
+      </a>
+      <a class="nav-item" data-page="bracket">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h4v4H3z"/><path d="M3 14h4v4H3z"/><path d="M17 10h4v4h-4z"/><path d="M7 8h5l5 4-5 4H7"/></svg>
+        <span class="nav-label">Tableau final</span>
+      </a>
+      <a class="nav-item" data-page="stats">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span class="nav-label">Statistiques</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-section-label">OUTILS</div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" data-page="formats">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><path d="M12 2a10 10 0 0 1 0 20"/><path d="M12 2a10 10 0 0 0 0 20"/><path d="M2 12h20"/></svg>
+        <span class="nav-label">Formats de match</span>
+      </a>
+      <a class="nav-item" data-page="display">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <span class="nav-label">Affichage public</span>
+      </a>
+      <a class="nav-item" data-page="settings">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span class="nav-label">Paramètres</span>
+      </a>
+    </nav>
+  </nav>
+
+  <!-- ═══════════════════ MAIN CONTENT ═══════════════════ -->
+  <div class="layout-main" id="layout-main">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button id="mobile-menu-btn" class="icon-btn" title="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <h1 class="topbar-title" id="topbar-title">Tableau de bord</h1>
+      </div>
+      <div class="topbar-right">
+        <!-- Sélecteur de tournoi rapide -->
+        <div style="display:flex;align-items:center;gap:8px;margin-right:8px;border-right:1px solid var(--color-border);padding-right:12px">
+          <span id="topbar-tournament-name" style="font-size:13px;font-weight:600;color:var(--color-text);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer" onclick="App.navigate('history')" title="Voir tous les tournois">—</span>
+          <button class="btn btn-sm btn-primary" id="btn-new-tournament-topbar" style="padding:4px 10px;font-size:12px;white-space:nowrap">+ Nouveau</button>
+        </div>
+        <div class="search-wrapper" id="search-wrapper" style="display:none">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="global-search" class="search-input" placeholder="Rechercher...">
+        </div>
+        <button class="icon-btn" id="btn-fullscreen-display" title="Affichage public plein écran">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        </button>
+        <button class="icon-btn" id="btn-print-page" title="Imprimer / Exporter PDF">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Bannière tournoi actif -->
+    <div id="tournament-banner" style="display:none;background:var(--color-primary);color:white;padding:6px 20px;display:flex;align-items:center;gap:12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.15)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;flex-shrink:0"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span id="banner-tournament-name" style="font-weight:700;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+      <span id="banner-tournament-date" style="opacity:0.8"></span>
+      <span id="banner-tournament-status" style="background:rgba(255,255,255,0.2);padding:1px 8px;border-radius:20px;font-size:11px"></span>
+      <div style="flex:1"></div>
+      <button id="btn-banner-switch" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:white;padding:3px 10px;border-radius:var(--radius-md);font-size:12px;cursor:pointer;white-space:nowrap" onclick="App.navigate('history')">
+        🔄 Changer de tournoi
+      </button>
+    </div>
+
+    <!-- Page Content -->
+    <main id="page-content" class="page-content">
+      <div class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p>Chargement…</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══════════════════ SIDEBAR OVERLAY (mobile) ═══════════════════ -->
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <!-- ═══════════════════ BOTTOM NAVIGATION (mobile) ═══════════════════
+       Navigation principale au pouce sur petit écran : masquée sur
+       desktop (voir .bottom-nav dans style.css), affichée sous 768px.
+       Ne remplace pas le menu hamburger (toujours utile pour les pages
+       secondaires) mais couvre les 4 actions les plus fréquentes. -->
+  <nav class="bottom-nav" id="bottom-nav" aria-label="Navigation principale">
+    <div class="bottom-nav-list">
+      <button class="bottom-nav-item" data-bottom-page="history" title="Accueil">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Accueil</span>
+      </button>
+      <button class="bottom-nav-item" data-bottom-page="dashboard" title="Tableau de bord">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Bord</span>
+      </button>
+      <button class="bottom-nav-item" data-bottom-page="scores" title="Scores">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span>Scores</span>
+      </button>
+      <button class="bottom-nav-item" data-bottom-page="bracket" title="Tableau final">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h4v4H3z"/><path d="M3 14h4v4H3z"/><path d="M17 10h4v4h-4z"/><path d="M7 8h5l5 4-5 4H7"/></svg>
+        <span>Tableau</span>
+      </button>
+      <button class="bottom-nav-item" id="bottom-nav-more" title="Plus">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <span>Plus</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════ MODAL ═══════════════════ -->
+  <div id="modal-overlay" class="modal-overlay" aria-hidden="true">
+    <div id="modal-dialog" class="modal-dialog" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h2 id="modal-title" class="modal-title"></h2>
+        <button id="modal-close-btn" class="modal-close-btn" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+      <div id="modal-footer" class="modal-footer"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ DISPLAY FULLSCREEN ═══════════════════ -->
+  <div id="display-overlay" class="display-overlay" aria-hidden="true">
+    <div id="display-content" class="display-content"></div>
+    <button id="display-close-btn" class="display-close-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Fermer
+    </button>
+  </div>
+
+  <!-- ═══════════════════ WIZARD ONBOARDING ════════════════ -->
+  <div id="wizard-overlay" class="wizard-overlay" style="display:none" aria-modal="true" role="dialog">
+    <div class="wizard-box" id="wizard-box"></div>
+  </div>
+
+  <!-- ═══════════════════ NOTIFICATIONS ═══════════════════ -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- ═══════════════════ CONFIRM DIALOG ═══════════════════ -->
+  <div id="confirm-overlay" class="confirm-overlay" aria-hidden="true">
+    <div class="confirm-dialog">
+      <div class="confirm-icon" id="confirm-icon"></div>
+      <h3 id="confirm-title"></h3>
+      <p id="confirm-message"></p>
+      <div class="confirm-actions">
+        <button id="confirm-cancel-btn" class="btn btn-ghost">Annuler</button>
+        <button id="confirm-ok-btn" class="btn btn-danger">Confirmer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+  <!--
+    Cache-busting : les balises <meta http-equiv="Cache-Control"> du <head>
+    n'empêchent que la mise en cache de CETTE page HTML — elles n'ont aucun
+    effet sur les fichiers .js chargés ci-dessous via <script src="...">, qui
+    peuvent rester en cache navigateur (ou CDN d'hébergement) même après un
+    correctif déployé. D'où des bugs déjà corrigés dans le code source qui
+    semblaient persister tant que l'utilisateur ne faisait pas un
+    rechargement forcé (Ctrl+Shift+R). Le paramètre ?v=AAAAMMJJ force le
+    navigateur à retélécharger les fichiers à chaque nouvelle date de mise à
+    jour : incrémenter/mettre à jour cette valeur à chaque déploiement.
+  -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="firebase-init.js?v=20260703c"></script>
+  <script src="utils.js?v=20260703c"></script>
+  <script src="storage.js?v=20260703c"></script>
+  <script src="audit.js?v=20260703c"></script>
+  <script src="dashboard.js?v=20260703c"></script>
+  <script src="players.js?v=20260703c"></script>
+  <script src="settings.js?v=20260703c"></script>
+  <script src="teams.js?v=20260703c"></script>
+  <script src="formats.js?v=20260703c"></script>
+  <script src="pools.js?v=20260703c"></script>
+  <script src="schedule.js?v=20260703c"></script>
+  <script src="courts.js?v=20260703c"></script>
+  <script src="scores.js?v=20260703c"></script>
+  <script src="rankings.js?v=20260703c"></script>
+  <script src="bracket.js?v=20260703c"></script>
+  <script src="stats.js?v=20260703c"></script>
+  <script src="display.js?v=20260703c"></script>
+  <script src="history.js?v=20260703c"></script>
+  <script src="app.js?v=20260703c"></script>
+
+</body>
+</html>
