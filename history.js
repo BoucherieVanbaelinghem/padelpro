@@ -328,12 +328,24 @@ const HistoryModule = (() => {
         Storage.deleteTournament(id);
 
         if (wasActive) {
-          // Bascule automatiquement vers le tournoi restant le plus récent,
-          // sinon App.refreshActiveTournament() en créera un nouveau vide.
           const remaining = Object.values(Storage.getAllTournaments())
             .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
-          if (remaining.length > 0) Storage.setActiveId(remaining[0].id);
-          App.refreshActiveTournament();
+          if (remaining.length > 0) {
+            // Bascule vers le tournoi restant le plus récent.
+            Storage.setActiveId(remaining[0].id);
+            App.refreshActiveTournament();
+          } else {
+            // AUCUN tournoi restant : surtout ne PAS appeler
+            // App.refreshActiveTournament() ici — Storage.getActive() crée
+            // automatiquement un tournoi vide dès qu'aucun n'existe (pour
+            // que le reste de l'app ait toujours un tournoi "actif" à
+            // manipuler). Résultat : chaque suppression du dernier tournoi
+            // en faisait immédiatement réapparaître un nouveau vide, ce qui
+            // ressemblait à "la suppression ne marche pas". On se contente
+            // ici d'effacer l'ID actif ; un nouveau tournoi ne sera créé
+            // que si l'utilisateur clique explicitement "Nouveau tournoi".
+            Storage.clearActiveId();
+          }
         }
 
         App.toast('Tournoi supprimé', 'success');
