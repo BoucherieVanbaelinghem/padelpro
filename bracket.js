@@ -43,6 +43,7 @@ const BracketModule = (() => {
             <p class="page-subtitle">Phase éliminatoire + classements</p>
           </div>
           <div class="page-header-actions">
+            ${hasAny ? '<button class="btn btn-secondary" id="btn-bracket-fullscreen" title="Voir en plein écran">⛶ Plein écran</button>' : ''}
             ${hasAny ? '<button class="btn btn-secondary" id="btn-refresh-bracket" title="Recharger l\'affichage si les scores saisis n\'apparaissent pas">↻ Actualiser</button>' : ''}
             ${hasAny ? '<button class="btn btn-secondary" id="btn-reset-bracket">🔄 Réinitialiser</button>' : ''}
             <button class="btn btn-primary" id="btn-gen-bracket">⚡ Générer les tableaux</button>
@@ -84,6 +85,45 @@ const BracketModule = (() => {
         if (m && m.team1Id && m.team2Id && m.status !== 'finished') openScoreForm(m, t);
       });
     });
+    Utils.el('#btn-bracket-fullscreen', _container)?.addEventListener('click', openBracketFullscreen);
+  };
+
+  // ── Mode plein écran (réutilise l'overlay de la page Affichage public)
+  // Sur téléphone, on ne peut pas forcer le mode paysage en JS (non
+  // supporté par Safari/iOS) : on affiche donc une invite à tourner
+  // l'appareil, et le contenu défile librement en largeur/hauteur
+  // (touch pan) pour rester consultable dans les deux orientations.
+  const openBracketFullscreen = () => {
+    const overlay = Utils.el('#display-overlay');
+    const content = Utils.el('#display-content');
+    if (!overlay || !content) return;
+    const t = App.getTournament();
+
+    content.innerHTML = `
+      <div class="bracket-fullscreen-wrap">
+        <div class="bracket-fullscreen-hint">🔄 Tournez votre téléphone en mode paysage pour une meilleure vue</div>
+        <div class="bracket-fullscreen-scroll">${renderCurrentTab(t)}</div>
+      </div>`;
+
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+
+    content.querySelectorAll('.bracket-team[data-match]').forEach(el => {
+      el.addEventListener('click', () => {
+        const t2 = App.getTournament();
+        const m = (t2.matches || []).find(x => x.id === el.dataset.match);
+        if (m && m.team1Id && m.team2Id && m.status !== 'finished') {
+          overlay.classList.remove('active');
+          overlay.setAttribute('aria-hidden', 'true');
+          openScoreForm(m, t2);
+        }
+      });
+    });
+
+    Utils.el('#display-close-btn')?.addEventListener('click', () => {
+      overlay.classList.remove('active');
+      overlay.setAttribute('aria-hidden', 'true');
+    }, { once: true });
   };
 
   const renderCurrentTab = (t) => {

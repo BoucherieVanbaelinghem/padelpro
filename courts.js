@@ -94,7 +94,7 @@ const CourtsModule = (() => {
           ${_buildAbsentBanner(t)}
 
           <!-- Grille terrains -->
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--space-4);margin-bottom:var(--space-5)">
+          <div class="courts-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--space-4);margin-bottom:var(--space-5)">
             ${courts.map(c => _renderCourtCard(t, c, matches)).join('')}
           </div>
 
@@ -249,8 +249,8 @@ const CourtsModule = (() => {
             </div>
             ${scheduled.length > 1 ? `<div style="margin-top:var(--space-2);font-size:10px;color:var(--color-text-faint)">+${scheduled.length - 1} autre${scheduled.length > 2 ? 's' : ''} match${scheduled.length > 2 ? 's' : ''} planifié${scheduled.length > 2 ? 's' : ''}</div>` : ''}
           ` : `
-            <div style="text-align:center;padding:var(--space-6) 0">
-              <div style="font-size:3rem;margin-bottom:var(--space-2)">✅</div>
+            <div class="court-empty-state" style="text-align:center;padding:var(--space-6) 0">
+              <div class="court-empty-icon" style="font-size:3rem;margin-bottom:var(--space-2)">✅</div>
               <div style="color:var(--color-text-muted);font-size:var(--font-size-sm)">Terrain disponible</div>
               <div style="font-size:10px;color:var(--color-text-faint);margin-top:4px">Aucun match planifié</div>
             </div>

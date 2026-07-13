@@ -48,13 +48,13 @@ const DisplayModule = (() => {
         <div id="match-call-banner" style="display:none;margin-bottom:var(--space-4)"></div>
 
         <!-- Cartes terrains -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--space-4);margin-bottom:var(--space-5)">
+        <div class="display-courts-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--space-4);margin-bottom:var(--space-5)">
           ${courts.map(c => renderCourtCard(t, c)).join('')}
           ${courts.length === 0 ? '<div class="card"><div class="card-body"><div class="empty-state"><div class="empty-state-icon">🏟️</div><h3>Aucun terrain configuré</h3><p>Ajoutez des terrains dans Paramètres → Terrains.</p></div></div></div>' : ''}
         </div>
 
         <!-- QR Code + Prochains matchs + Soumission scores -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 280px;gap:var(--space-4)">
+        <div class="display-widgets-grid" style="display:grid;grid-template-columns:1fr 1fr 280px;gap:var(--space-4)">
           <div class="card">
             <div class="card-header"><span class="card-title">⏭️ Prochains matchs</span></div>
             <div class="card-body" style="padding:0">
@@ -129,8 +129,8 @@ const DisplayModule = (() => {
               <div style="font-size:var(--font-size-lg);font-weight:800;margin-bottom:var(--space-2)">${Utils.escHtml(getTeamName(t, next.team2Id))}</div>
               <button class="btn btn-sm btn-primary" onclick="DisplayModule._callMatch('${next.id}','${Utils.escHtml(court.name)}')">🔔 Appeler ce match</button>
             ` : `
-              <div style="text-align:center;padding:var(--space-4)">
-                <div style="font-size:2.5rem">✅</div>
+              <div class="display-empty-state" style="text-align:center;padding:var(--space-4)">
+                <div class="display-empty-icon" style="font-size:2.5rem">✅</div>
                 <div style="color:var(--color-text-muted);font-size:var(--font-size-sm);margin-top:var(--space-2)">Terrain disponible</div>
                 <div style="font-size:11px;color:var(--color-text-faint);margin-top:4px">Aucun match planifié</div>
               </div>
@@ -229,8 +229,11 @@ const DisplayModule = (() => {
             ⚠️ En mode fichier local, le QR Code ne fonctionne que sur cet ordinateur.<br>
             Utilisez <strong>Exporter la feuille</strong> ou ouvrez l'app via un serveur web.
           </div>` : `
-          <img src="${qrApiUrl}" alt="QR Code" style="width:200px;height:200px;border-radius:var(--radius-md)" onerror="this.style.display='none';document.getElementById('qr-fallback').style.display=''">
-          <div id="qr-fallback" style="display:none;padding:var(--space-4);background:var(--color-bg-alt);border-radius:var(--radius-md);font-size:11px;color:var(--color-text-muted)">QR Code (connexion internet requise)</div>
+          <img src="${qrApiUrl}" alt="QR Code" style="width:200px;height:200px;max-width:100%;border-radius:var(--radius-md)" onerror="this.style.display='none';document.getElementById('qr-fallback').style.display=''">
+          <div id="qr-fallback" style="display:none;padding:var(--space-4);background:var(--color-bg-alt);border-radius:var(--radius-md);font-size:11px;color:var(--color-text-muted)">⚠️ QR Code indisponible (connexion internet requise)</div>
+          <div style="margin-top:var(--space-2);font-size:10px;color:var(--color-text-faint);word-break:break-all">
+            <a href="${viewerUrl}" target="_blank" rel="noopener" style="color:var(--color-primary)">${viewerUrl}</a>
+          </div>
         `}
         <div style="margin-top:var(--space-3);display:flex;flex-direction:column;gap:var(--space-2)">
           <button class="btn btn-primary btn-sm" id="btn-export-viewer">💾 Exporter la feuille de match</button>

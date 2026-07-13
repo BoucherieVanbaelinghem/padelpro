@@ -142,7 +142,7 @@ const PlayersModule = (() => {
             </div>
           </div></div>` :
         `<div class="card"><div style="overflow-x:auto">
-          <table class="table">
+          <table class="table players-table">
             <thead>
               <tr>
                 <th style="width:40px">✓</th>
@@ -178,37 +178,37 @@ const PlayersModule = (() => {
 
     return `<tr class="${p.present ? 'present-row' : ''}" data-id="${p.id}">
       <!-- Présence -->
-      <td style="text-align:center">
+      <td data-label="Présent" style="text-align:center">
         ${isEnrolled
           ? `<input type="checkbox" class="check-present" data-id="${p.id}" ${p.present ? 'checked' : ''} title="Présent aujourd'hui">`
           : `<button class="btn btn-sm btn-primary btn-enroll-one" data-id="${p.id}" style="padding:2px 8px;font-size:11px">+</button>`}
       </td>
-      <td style="font-weight:${isEnrolled ? '600' : '400'};color:${isEnrolled ? 'var(--color-text)' : 'var(--color-text-muted)'}">
+      <td data-label="Nom" style="font-weight:${isEnrolled ? '600' : '400'};color:${isEnrolled ? 'var(--color-text)' : 'var(--color-text-muted)'}">
         ${Utils.escHtml(p.lastName || '')}
       </td>
-      <td>${Utils.escHtml(p.firstName || '')}</td>
-      <td>
+      <td data-label="Prénom">${Utils.escHtml(p.firstName || '')}</td>
+      <td data-label="Niveau">
         ${level ? `<span class="badge" style="background:${level.color}22;color:${level.color};">${Utils.escHtml(level.name)}</span>` : '<span class="text-muted">—</span>'}
       </td>
-      <td><span style="font-size:var(--font-size-xs);font-weight:700;color:var(--color-primary)">${Utils.escHtml(p.classementFFT || 'NC')}</span></td>
-      <td>${p.gender === 'M' ? '♂️' : p.gender === 'F' ? '♀️' : '—'}</td>
-      <td>${Utils.escHtml(p.club || '—')}</td>
-      <td style="font-size:var(--font-size-xs);color:var(--color-text-muted)">
+      <td data-label="FFT"><span style="font-size:var(--font-size-xs);font-weight:700;color:var(--color-primary)">${Utils.escHtml(p.classementFFT || 'NC')}</span></td>
+      <td data-label="Sexe">${p.gender === 'M' ? '♂️' : p.gender === 'F' ? '♀️' : '—'}</td>
+      <td data-label="Club">${Utils.escHtml(p.club || '—')}</td>
+      <td data-label="Contact" style="font-size:var(--font-size-xs);color:var(--color-text-muted)">
         ${p.email ? `<div>${Utils.escHtml(p.email)}</div>` : ''}
         ${p.phone ? `<div>${Utils.escHtml(p.phone)}</div>` : ''}
         ${!p.email && !p.phone ? '—' : ''}
       </td>
-      <td>
+      <td data-label="Équipe">
         ${team
           ? `<span class="badge badge-primary" style="font-size:10px">${Utils.escHtml(team.name || '?')}</span>`
           : (isEnrolled ? '<span class="text-muted" style="font-size:11px">Sans équipe</span>' : '')}
       </td>
-      ${p.enrolled !== undefined ? `<td>
+      ${p.enrolled !== undefined ? `<td data-label="Tournoi">
         ${isEnrolled
           ? `<button class="btn btn-sm btn-ghost btn-unenroll-one" data-id="${p.id}" title="Désinscrire de ce tournoi" style="font-size:11px">−</button>`
           : `<button class="btn btn-sm btn-primary btn-enroll-one" data-id="${p.id}" style="font-size:11px">+ Inscrire</button>`}
       </td>` : ''}
-      <td style="white-space:nowrap">
+      <td data-label="Actions" style="white-space:nowrap">
         <button class="btn btn-ghost btn-sm btn-edit-player" data-id="${p.id}" title="Modifier">✏️</button>
         <button class="btn btn-ghost btn-sm btn-delete-player" data-id="${p.id}" title="Supprimer de la base">🗑️</button>
       </td>

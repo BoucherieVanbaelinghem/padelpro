@@ -127,9 +127,12 @@ const App = (() => {
     const titleEl = Utils.el('#topbar-title');
     if (titleEl) titleEl.textContent = config.title;
 
-    // Search
+    // Search — on bascule une classe (et non un style inline) pour que la
+    // règle mobile @media(max-width:480px) puisse forcer le masquage sans
+    // être écrasée par un style inline, qui gagnerait toujours sur la
+    // feuille de style externe quelle que soit la media query.
     const sw = Utils.el('#search-wrapper');
-    if (sw) sw.style.display = config.search ? 'flex' : 'none';
+    if (sw) sw.classList.toggle('is-visible', !!config.search);
 
     // Fermer sidebar mobile
     document.body.classList.remove('sidebar-open');

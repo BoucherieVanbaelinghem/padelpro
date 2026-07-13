@@ -406,10 +406,12 @@ body.sidebar-collapsed .sidebar-header { padding: var(--space-4) var(--space-3);
 
 /* ── Search ─────────────────────────────────────────────────── */
 .search-wrapper {
+  display: none;
   position: relative;
   flex: 1;
   max-width: 320px;
 }
+.search-wrapper.is-visible { display: flex; }
 .search-icon {
   position: absolute; left: 10px; top: 50%;
   transform: translateY(-50%);
@@ -1226,6 +1228,20 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 .display-close-btn:hover { background: rgba(255,255,255,0.2); }
 .display-close-btn svg { width: 16px; height: 16px; }
 
+/* ── Tableau final en plein écran (bracket.js) ── */
+.bracket-fullscreen-wrap { height: 100%; display: flex; flex-direction: column; }
+.bracket-fullscreen-hint { display: none; text-align: center; padding: 8px; font-size: 12px; background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.75); }
+.bracket-fullscreen-scroll {
+  flex: 1;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--space-4);
+  background: var(--color-bg);
+}
+@media (max-width: 900px) and (orientation: portrait) {
+  .bracket-fullscreen-hint { display: block; }
+}
+
 .display-header {
   padding: var(--space-6) var(--space-8);
   display: flex; align-items: center; justify-content: space-between;
@@ -1564,6 +1580,65 @@ textarea.form-control { resize: vertical; min-height: 80px; }
   table thead, table tbody, table tr, table th, table td { white-space: nowrap; }
   th, td { padding: 8px 10px !important; font-size: 12px !important; }
 
+  /* ── Table Joueurs : trop de colonnes (Nom/Prénom/Niveau/FFT/Sexe/Club/
+     Contact/Équipe/Actions) pour tenir sur un écran de téléphone, même en
+     scroll horizontal — illisible. On transforme chaque ligne en carte
+     empilée (technique classique "responsive table"), avec le libellé de
+     colonne affiché via data-label sur chaque cellule. */
+  .players-table { overflow: visible; }
+  .players-table thead { display: none; }
+  .players-table, .players-table tbody, .players-table tr, .players-table td {
+    display: block; width: 100%; white-space: normal;
+  }
+  .players-table tr {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-surface);
+  }
+  .players-table td {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 7px 0 !important;
+    border: none;
+    border-bottom: 1px solid var(--color-border-light);
+    text-align: right;
+    font-size: 13px !important;
+  }
+  .players-table td:last-child { border-bottom: none; }
+  .players-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    font-size: 10px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: left;
+    flex-shrink: 0;
+  }
+  .players-table td[data-label="Nom"] { font-size: 15px !important; }
+
+  /* ── Cartes Terrains : beaucoup trop hautes sur mobile (padding vertical
+     généreux + icône 3rem pensés pour desktop), chaque carte occupait
+     quasi tout l'écran quand plusieurs terrains sont libres. ── */
+  .courts-grid { grid-template-columns: 1fr !important; gap: var(--space-2) !important; }
+  .court-empty-state { padding: var(--space-3) 0 !important; }
+  .court-empty-icon { font-size: 1.6rem !important; margin-bottom: 4px !important; }
+
+  /* ── Page "Affichage public" (display.js) : la grille terrains + la
+     grille des 3 widgets (Prochains matchs / Scores joueurs / QR Code)
+     utilisaient des largeurs fixes en style inline (dont une colonne
+     280px), impossibles à faire tenir sur un téléphone → texte tronqué
+     lettre par lettre, QR Code invisible car sa colonne était écrasée
+     à quelques pixels de large. ── */
+  .display-courts-grid { grid-template-columns: 1fr !important; gap: var(--space-2) !important; }
+  .display-widgets-grid { grid-template-columns: 1fr !important; }
+  .display-empty-state { padding: var(--space-3) !important; }
+  .display-empty-icon { font-size: 1.75rem !important; }
+
   /* ── Pool cards ── */
   .pool-card { border-radius: var(--radius-lg); }
   .pool-card-header { padding: 8px 12px; font-size: var(--font-size-sm); }
@@ -1674,8 +1749,9 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 @media (max-width: 480px) {
   .page-content { padding: var(--space-2); }
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-2); }
-  .search-wrapper { display: none; }
+  .search-wrapper.is-visible { display: none; }
   .topbar-right .icon-btn:not(#btn-fullscreen-display) { display: none; }
+  .topbar-quickswitch { display: none !important; }
 
   /* Dashboard hero : colonne sur mobile */
   .hero-body { flex-direction: column !important; align-items: flex-start !important; gap: var(--space-2) !important; }
