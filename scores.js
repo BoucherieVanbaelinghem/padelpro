@@ -372,51 +372,51 @@ const ScoresModule = (() => {
     const checkInOk = t1checkin && t2checkin;
 
     return `
-      <div class="card ${isRunning ? 'animate-pulse' : ''}" style="border-color:${isRunning ? 'var(--color-warning)' : isFinished ? 'var(--color-success)' : 'var(--color-border)'}">
-        <div class="card-body" style="padding:var(--space-4) var(--space-5)">
-          <div style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap">
+      <div class="card sc-card ${isRunning ? 'animate-pulse' : ''}" style="border-color:${isRunning ? 'var(--color-warning)' : isFinished ? 'var(--color-success)' : 'var(--color-border)'}">
+        <div class="card-body sc-card-body" style="padding:var(--space-4) var(--space-5)">
+          <div class="sc-row" style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap">
             <!-- Méta -->
-            <div style="display:flex;flex-direction:column;gap:4px;min-width:80px">
+            <div class="sc-meta" style="display:flex;flex-direction:column;gap:4px;min-width:80px">
               ${m.scheduledTime ? `<span style="font-size:var(--font-size-sm);font-weight:700;color:var(--color-primary)">${m.scheduledTime}</span>` : ''}
               ${court ? `<span class="badge badge-neutral" style="font-size:10px">${Utils.escHtml(court.name)}</span>` : ''}
               ${phaseBadge}
             </div>
 
             <!-- Équipes & Score -->
-            <div style="flex:1;display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap">
-              <div style="flex:1;text-align:right">
-                <div style="font-size:var(--font-size-base);font-weight:${winner===m.team1Id?'800':'600'};color:${winner===m.team1Id?'var(--color-success)':winner&&winner!==m.team1Id?'var(--color-text-muted)':'var(--color-text)'}">
+            <div class="sc-teams" style="flex:1;display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap">
+              <div class="sc-team sc-team-1" style="flex:1;text-align:right">
+                <div class="sc-team-name" style="font-size:var(--font-size-base);font-weight:${winner===m.team1Id?'800':'600'};color:${winner===m.team1Id?'var(--color-success)':winner&&winner!==m.team1Id?'var(--color-text-muted)':'var(--color-text)'}">
                   ${Utils.escHtml(t1)}${!isFinished && !isRunning && !t1checkin ? ' <span title="Non check-in" style="font-size:12px">⚠️</span>' : ''}
                 </div>
-                <div style="font-size:11px;color:var(--color-text-muted);margin-top:2px">${getTeamPlayers(t, m.team1Id)}</div>
+                <div class="sc-team-players" style="font-size:11px;color:var(--color-text-muted);margin-top:2px">${getTeamPlayers(t, m.team1Id)}</div>
               </div>
 
               ${isFinished && m.walkover ? `
-                <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+                <div class="sc-score" style="display:flex;flex-direction:column;align-items:center;gap:4px">
                   <span style="font-size:var(--font-size-lg);font-weight:800;color:var(--color-danger)">WO</span>
                   <span style="font-size:10px;color:var(--color-text-muted)">Forfait</span>
                 </div>` :
               isFinished && m.score ? `
-                <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+                <div class="sc-score" style="display:flex;flex-direction:column;align-items:center;gap:2px">
                   ${m.score.sets.map(s => `
-                    <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-lg);font-weight:800">
+                    <div class="sc-score-set" style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-lg);font-weight:800">
                       <span style="color:${s.team1>s.team2?'var(--color-success)':'var(--color-text)'};min-width:20px;text-align:right">${s.team1}</span>
                       <span style="color:var(--color-text-faint);font-size:12px">—</span>
                       <span style="color:${s.team2>s.team1?'var(--color-success)':'var(--color-text)'};min-width:20px">${s.team2}</span>
                     </div>`).join('')}
                 </div>` :
-              `<div style="font-size:var(--font-size-sm);color:var(--color-text-faint);font-weight:700;padding:0 var(--space-3)">VS</div>`}
+              `<div class="sc-score" style="font-size:var(--font-size-sm);color:var(--color-text-faint);font-weight:700;padding:0 var(--space-3)">VS</div>`}
 
-              <div style="flex:1">
-                <div style="font-size:var(--font-size-base);font-weight:${winner===m.team2Id?'800':'600'};color:${winner===m.team2Id?'var(--color-success)':winner&&winner!==m.team2Id?'var(--color-text-muted)':'var(--color-text)'}">
+              <div class="sc-team sc-team-2" style="flex:1">
+                <div class="sc-team-name" style="font-size:var(--font-size-base);font-weight:${winner===m.team2Id?'800':'600'};color:${winner===m.team2Id?'var(--color-success)':winner&&winner!==m.team2Id?'var(--color-text-muted)':'var(--color-text)'}">
                   ${Utils.escHtml(t2)}${!isFinished && !isRunning && !t2checkin ? ' <span title="Non check-in" style="font-size:12px">⚠️</span>' : ''}
                 </div>
-                <div style="font-size:11px;color:var(--color-text-muted);margin-top:2px">${getTeamPlayers(t, m.team2Id)}</div>
+                <div class="sc-team-players" style="font-size:11px;color:var(--color-text-muted);margin-top:2px">${getTeamPlayers(t, m.team2Id)}</div>
               </div>
             </div>
 
             <!-- Actions -->
-            <div style="display:flex;flex-direction:column;gap:var(--space-2);align-items:flex-end">
+            <div class="sc-actions" style="display:flex;flex-direction:column;gap:var(--space-2);align-items:flex-end">
               ${isFinished
                 ? m.walkover
                   ? `<span class="badge badge-danger">WO</span>

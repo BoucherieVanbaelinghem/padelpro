@@ -9,29 +9,29 @@
 // lui-même invalidé. C'est ce qui a fait réapparaître le bug de création de
 // tournois fantômes malgré le correctif de storage.js : le navigateur
 // continuait d'exécuter l'ancienne version en cache.
-const CACHE_NAME = 'padelpro-v10-20260703c';
+const CACHE_NAME = 'padelpro-v12-20260703e';
 const ASSETS = [
   './index.html',
-  './style.css?v=20260703c',
-  './utils.js?v=20260703c',
-  './firebase-init.js?v=20260703c',
-  './storage.js?v=20260703c',
-  './audit.js?v=20260703c',
-  './app.js?v=20260703c',
-  './dashboard.js?v=20260703c',
-  './players.js?v=20260703c',
-  './settings.js?v=20260703c',
-  './teams.js?v=20260703c',
-  './formats.js?v=20260703c',
-  './pools.js?v=20260703c',
-  './schedule.js?v=20260703c',
-  './courts.js?v=20260703c',
-  './scores.js?v=20260703c',
-  './rankings.js?v=20260703c',
-  './bracket.js?v=20260703c',
-  './stats.js?v=20260703c',
-  './display.js?v=20260703c',
-  './history.js?v=20260703c',
+  './style.css?v=20260703e',
+  './utils.js?v=20260703e',
+  './firebase-init.js?v=20260703e',
+  './storage.js?v=20260703e',
+  './audit.js?v=20260703e',
+  './app.js?v=20260703e',
+  './dashboard.js?v=20260703e',
+  './players.js?v=20260703e',
+  './settings.js?v=20260703e',
+  './teams.js?v=20260703e',
+  './formats.js?v=20260703e',
+  './pools.js?v=20260703e',
+  './schedule.js?v=20260703e',
+  './courts.js?v=20260703e',
+  './scores.js?v=20260703e',
+  './rankings.js?v=20260703e',
+  './bracket.js?v=20260703e',
+  './stats.js?v=20260703e',
+  './display.js?v=20260703e',
+  './history.js?v=20260703e',
   './manifest.json'
 ];
 
