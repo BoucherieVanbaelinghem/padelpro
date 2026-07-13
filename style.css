@@ -224,7 +224,12 @@ body.sidebar-collapsed .sidebar-header { padding: var(--space-4) var(--space-3);
   border: 1px solid var(--sidebar-border);
   border-radius: var(--radius-md);
   padding: var(--space-3) var(--space-4);
-  overflow: hidden;
+  /* overflow:hidden retiré : combiné à un line-height serré sur .stc-name,
+     il coupait le HAUT des lettres (les majuscules perdaient leur partie
+     supérieure) dès que le nom du tournoi était un peu long. Ce n'était
+     pas un problème de largeur mais de hauteur de ligne trop juste pour
+     la taille de police, aggravé par le rognage du conteneur. */
+  overflow: visible;
   transition: opacity var(--transition-base);
 }
 .stc-name {
@@ -234,10 +239,17 @@ body.sidebar-collapsed .sidebar-header { padding: var(--space-4) var(--space-3);
   /* Volontairement PAS de nowrap/ellipsis : un nom tronqué avec "..."
      revient à cacher une partie du nom, ce qui a été signalé à plusieurs
      reprises comme "le nom est coupé". On préfère laisser le nom
-     s'enrouler sur 2-3 lignes plutôt que d'en perdre un morceau. */
+     s'enrouler sur 2-3 lignes plutôt que d'en perdre un morceau.
+     line-height généreux (1.5, et non 1.2/1.3) + display:block : sans ça,
+     la hauteur de ligne calculée peut être plus courte que la boîte
+     réelle des glyphes (ascendantes des majuscules), qui se retrouvent
+     alors rognées en haut par le conteneur parent. */
+  display: block;
   white-space: normal;
   overflow-wrap: break-word;
-  line-height: 1.3;
+  overflow: visible;
+  line-height: 1.5;
+  padding-top: 2px;
 }
 .stc-date {
   font-size: var(--font-size-xs);
